@@ -10,7 +10,7 @@ class TtreeNode:
         self._character = character
         self._lt = None
         self._gt = None
-        self._equal = None
+        self._equals = None
         self.is_end = False
 
     def _insert(self, word, index=0):
@@ -30,9 +30,9 @@ class TtreeNode:
                 self._gt = TtreeNode(char)
             self._gt._insert(word, index)
         else:
-            if self._equal is None:
-                self._equal = TtreeNode()
-            self._equal._insert(word, index + 1)
+            if self._equals is None:
+                self._equals = TtreeNode()
+            self._equals._insert(word, index + 1)
 
     def _search(self, word, index=0, exact=False):  # exact parameter added
         """Search for words (when exact is True)
@@ -53,18 +53,18 @@ class TtreeNode:
                 self._gt._search(word, index, exact)
                 )
         else:
-            return self._equal is not None and (
-                self._equal._search(word, index + 1, exact)
+            return self._equals is not None and (
+                self._equals._search(word, index + 1, exact)
                 )
 
-    def _collect_words(self, results, prefix):
+    def _collect_words(self, results, prefix=""):
         """Collect all words stored in the ternary search tree."""
         if self.is_end:
             results.append(prefix)
         if self._lt:
             self._lt._collect_words(results, prefix)
-        if self._equal:
-            self._equal._collect_words(results, prefix + self._character)
+        if self._equals:
+            self._equals._collect_words(results, prefix + self._character)
         if self._gt:
             self._gt._collect_words(results, prefix)
 
@@ -76,12 +76,12 @@ class TtreeNode:
 
     def __len__(self):
         """Calculate the number of nodes in the tree"""
-        length = 1
-        if self._lt is not None:
+        length = 1 if self.is_end else 0
+        if self._lt:
             length += len(self._lt)
-        if self._equal is not None:
+        if self._equals:
             length += len(self._equal)
-        if self._gt is not None:
+        if self._gt:
             length += len(self._gt)
         return length
 
@@ -90,7 +90,7 @@ class TtreeNode:
         repr_str = prefix + repr(self)
         if self._lt:
             repr_str += '\n' + self._lt._to_string(prefix + '  ')
-        if self._equal:
+        if self._equals:
             repr_str += '\n' + self._equal._to_string(prefix + '  ')
         if self._gt:
             repr_str += '\n' + self._gt._to_string(prefix + '  ')
