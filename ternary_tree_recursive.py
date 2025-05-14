@@ -1,0 +1,133 @@
+""""This is a reviewed version of a previously designed ternary search tree implemented and differs in
+sense that it does not contain empty nodes and slices strings recursively, therefore being more memory efficient
+but making a function call heavier."""
+
+class TSTNode:
+    def __init__(self, char):
+        self.char = char
+        self.last_char_in_string = False
+        self.less_than = None
+        self.equals = None
+        self.larger_than = None
+
+    def _insert(self, string):
+        char = string[0]
+
+        if char < self.char:
+            if self.less_than is None:
+                self.less_than = TSTNode(char)
+            self.less_than._insert(string)
+        elif char > self.char:
+            if self.larger_than is None:
+                self.larger_than = TSTNode(char)
+            self.larger_than._insert(string)
+        elif len(string) > 1:
+            if self.equals is None:
+                self.equals = TSTNode(string[1])
+            self.equals._insert(string[1:])
+        else:
+            self.last_char_in_string = True
+
+    def _search(self, string):
+        char = string[0]
+
+        if char < self.char:
+            return self.less_than._search(string) if self.less_than else False
+        elif char > self.char:
+            return self.larger_than._search(string) if self.larger_than else False
+        elif len(string) > 1:
+            return self.equals._search(string[1:]) if self.equals else False
+        else:
+            return self.last_char_in_string
+
+    def _all_strings(self, prefix=""):
+        strings = []
+        if self.last_char_in_string:
+            strings.append(prefix + self.char)
+        if self.less_than:
+            strings.extend(self.less_than._all_strings(prefix))
+        if self.equals:
+            strings.extend(self.equals._all_strings(prefix + self.char))
+        if self.larger_than:
+            strings.extend(self.larger_than._all_strings(prefix))
+        return strings
+
+    def __len__(self):
+        length = 1 if self.last_char_in_string else 0
+        if self.less_than:
+            length += len(self.less_than)
+        if self.equals:
+            length += len(self.equals)
+        if self.larger_than:
+            length += len(self.larger_than)
+        return length
+
+    def _to_string(self, indent=''):
+        repr_str = indent + repr(self.char) + ("*" if self.last_char_in_string else "")
+        if self.equals:
+            repr_str += '\n' + self.equals._to_string(indent + '  ')
+        if self.less_than:
+            repr_str += '\n' + self.less_than._to_string(indent + '  ')
+        if self.larger_than:
+            repr_str += '\n' + self.larger_than._to_string(indent + '  ')
+        return repr_str
+
+
+class TernarySearchTree_Recursive:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, string):
+        if not self.root:
+            self.root = TSTNode(string[0])
+        self.root._insert(string)
+
+    def search(self, string):
+        return self.root._search(string) if self.root else False
+
+    def prefix_search(self, prefix):
+        results = []
+        if not prefix:  # Check if prefix is empty
+            node = self.root
+        else:
+            node = self._search_prefix_node(self.root, prefix, 0)
+        if node:
+            self._collect_strings(node, prefix, results)
+        return results
+
+    def _search_prefix_node(self, node, prefix, index):
+        if not node:
+            return None
+
+        char = prefix[index]
+        if char < node.char:
+            return self._search_prefix_node(node.less_than, prefix, index)
+        elif char > node.char:
+            return self._search_prefix_node(node.larger_than, prefix, index)
+        elif index < len(prefix) - 1:
+            return self._search_prefix_node(node.equals, prefix, index + 1)
+        else:
+            return node
+
+    def _collect_strings(self, node, prefix, results):
+        if node.last_char_in_string:
+            results.append(prefix + node.char)
+
+        if node.less_than:
+            self._collect_strings(node.less_than, prefix, results)
+        if node.equals:
+            self._collect_strings(node.equals, prefix + node.char, results)
+        if node.larger_than:
+            self._collect_strings(node.larger_than, prefix, results)
+
+    def count_strings(self):
+        return len(self)
+
+    def all_strings(self):
+        return self.prefix_search("")
+
+    def __len__(self):
+        return len(self.root) if self.root else 0
+
+    def __repr__(self):
+        return self.root._to_string() if self.root else 'empty'
