@@ -9,3 +9,7 @@ Data for search tree algorithms.
    to test that they are not found in the search tree.
 1. `corncob_lowercase.txt`: list of over 50,000 English words,
    all lower case (http://www.mieliestronk.com/corncob_lowercase.txt).
+1. `words_alpha.txt`: list of over 300,000 English words,
+   all lower case (https://github.com/dwyl/english-words/tree/master).
+
+   
