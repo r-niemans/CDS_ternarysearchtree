@@ -1,4 +1,4 @@
-from ternary_tree_minimalistic import TernarySearchTreeSparse
+from trees.ternary_tree_minimalistic import TernarySearchTreeSparse
 import random 
 
 with open("frequency_words.txt") as file:
