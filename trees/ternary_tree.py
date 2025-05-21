@@ -80,7 +80,7 @@ class TtreeNode:
         if self._lt:
             length += len(self._lt)
         if self._equals:
-            length += len(self._equal)
+            length += len(self._equals)
         if self._gt:
             length += len(self._gt)
         return length
@@ -91,7 +91,7 @@ class TtreeNode:
         if self._lt:
             repr_str += '\n' + self._lt._to_string(prefix + '  ')
         if self._equals:
-            repr_str += '\n' + self._equal._to_string(prefix + '  ')
+            repr_str += '\n' + self._equals._to_string(prefix + '  ')
         if self._gt:
             repr_str += '\n' + self._gt._to_string(prefix + '  ')
         return repr_str
