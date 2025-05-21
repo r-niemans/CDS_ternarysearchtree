@@ -34,6 +34,91 @@ flowchart TD
     Documentation --> End
 ```
 
+## Repository structure 
+And below is a more comprised diagram, showing the working of the repository and. 
+
+```mermaid
+flowchart TD
+    %% Data Stores
+    subgraph "Data Stores"
+        DSLocal["Local Datasets<br/>(small)"]:::data
+        ExternalDS["External Datasets<br/>(large)"]:::data
+    end
+
+    %% Core Library
+    TL["Tree Library<br/>(TST & BTree Variants)"]:::core
+
+    %% Local Environment
+    subgraph "Local Workstation"
+        UT["Unit Test Harness"]:::test
+        TR["Test Results"]:::test
+        LB["Local Benchmark Notebook"]:::test
+        LM["Local Metrics"]:::test
+    end
+
+    %% HPC Environment
+    subgraph "HPC Cluster"
+        HC["HPC Client Scripts"]:::test
+        SL["SLURM Scheduler"]:::service
+        CN["Compute Nodes"]:::env
+        OS["HPC Output Storage"]:::data
+    end
+
+    %% Workflow Arrows
+    DSLocal -->|"ingest (insert/search)"| TL
+    ExternalDS -->|"ingest (insert/search)"| HC
+
+    TL -->|"run tests"| UT
+    UT -->|"generate results"| TR
+
+    TL -->|"benchmark with small data"| LB
+    LB -->|"collect metrics"| LM
+
+    HC -->|"submit jobs"| SL
+    SL -->|"execute on"| CN
+    CN -->|"store logs & metrics"| OS
+
+    %% Interconnections
+    TL --> HC
+
+    %% Click Events
+    click DSLocal "https://github.com/r-niemans/cds_ternarysearchtree/tree/main/data/"
+    click DSLocal "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/data/corncob_lowercase.txt"
+    click DSLocal "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/data/insert_words.txt"
+    click DSLocal "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/data/not_insert_words.txt"
+    click DSLocal "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/data/words_alpha.txt"
+    click DSLocal "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/data/README.md"
+    click ExternalDS "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/dataset_frequency.py"
+    click ExternalDS "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/dataset_frequency_pkl.py"
+    click ExternalDS "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/dataset_wiki_pkl.py"
+    click TL "https://github.com/r-niemans/cds_ternarysearchtree/tree/main/trees/"
+    click TL "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/trees/btree.py"
+    click TL "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/trees/ternary_tree.py"
+    click TL "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/trees/ternary_tree_B.py"
+    click TL "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/trees/ternary_tree_minimalistic.py"
+    click TL "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/trees/ternary_tree_recursive.py"
+    click UT "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/test_tst.py"
+    click LB "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/tst_implementations.ipynb"
+    click HC "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/insert_test.py"
+    click HC "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/insert_test2.py"
+    click HC "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/search_test.py"
+    click HC "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/search_test2.py"
+    click HC "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/search_exact_test.py"
+    click HC "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/search_exact_test2.py"
+    click HC "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/tst_full_execution.py"
+    click HC "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/vsc_py_file.py"
+    click SL "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/jobscript.slurm"
+    click SL "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/jobscript2.slurm"
+    click OS "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/Outputs/slurm-out.zip"
+
+    %% Styles
+    classDef core fill:#D6EAF8,stroke:#1B4F72,color:#1B2631;
+    classDef test fill:#D5F5E3,stroke:#196F3D,color:#0B5345;
+    classDef data fill:#FCF3CF,stroke:#B7950B,color:#7D6608,shape:cylinder;
+    classDef env fill:#FADBD8,stroke:#C0392B,color:#641E16;
+    classDef service fill:#E8DAEF,stroke:#7D3C98,color:#4A235A,shape:roundrect;
+```
+
 ## Contents and how to run the Project
 We started by developing our first ternary search tree (TST) `ternary_tree.py` using an object-oriented approach in Python, based on the binary tree from the course materials. To meet the requirements for prefix searches and exact searches, we made slight modifications to the binary tree structure in  `btree.py`. \
 After that, we divided our work into creating three or more different TSTs, each with unique performance characteristics: an iterative version `ternary_tree_B.py`, a sparse version `ternary_tree_minimalistic.py`, and a highly recursive version `ternary_tree_recursive.py`. \
