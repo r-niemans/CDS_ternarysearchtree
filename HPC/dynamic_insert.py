@@ -16,7 +16,7 @@ spec.loader.exec_module(tree_module)
 
 tree = None
 for name, obj in inspect.getmembers(tree_module, inspect.isclass):
-    if hasattr(obj, 'insert'):  # You can extend to also check for search, etc.
+    if hasattr(obj, 'insert'):
         tree = obj()
         break
 

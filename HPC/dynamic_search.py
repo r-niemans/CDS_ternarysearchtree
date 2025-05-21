@@ -15,7 +15,7 @@ spec.loader.exec_module(tree_module)
 
 tree = None
 for name, obj in inspect.getmembers(tree_module, inspect.isclass):
-    if hasattr(obj, 'insert'):  # You can extend to also check for search, etc.
+    if hasattr(obj, 'insert'):
         tree = obj()
         break
 
@@ -26,6 +26,9 @@ with open("frequency_words.pkl", "rb") as f:
     flat_values = pickle.load(f)
 
 insert_sample = random.sample(flat_values, k = 50_000_000)
+
+for word in insert_sample:
+    tree.insert(word)
 
 for word in insert_sample:
     tree.search(word, exact=False)
