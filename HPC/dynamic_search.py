@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import importlib.util
 import argparse
 import random
@@ -26,9 +25,9 @@ if tree is None:
 with open("frequency_words.pkl", "rb") as f:
     flat_values = pickle.load(f)
 
-insert_sample = random.sample(flat_values, k = 50000000)
+insert_sample = random.sample(flat_values, k = 50_000_000)
 
 for word in insert_sample:
-    tree.insert(word)
+    tree.search(word, exact=False)
 
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import importlib.util
 import argparse
 import random
@@ -29,6 +28,6 @@ with open("frequency_words.pkl", "rb") as f:
 insert_sample = random.sample(flat_values, k = 50000000)
 
 for word in insert_sample:
-    tree.insert(word)
+    tree.search(word, exact=True)
 
 
