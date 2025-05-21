@@ -35,7 +35,7 @@ flowchart TD
 ```
 
 ## Repository structure 
-And below is a more comprised diagram, showing the working of the repository and. 
+And below is a more comprised diagram, showing the working of the repository. 
 
 ```mermaid
 flowchart TD
