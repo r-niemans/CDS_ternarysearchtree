@@ -1,4 +1,4 @@
-# Concept of Data Science 2024-2025 - Implementation of a Tenary Search Tree
+# Concepts of Data Science 2024-2025 - Implementation of a Tenary Search Tree
 
 ## Project Description :
 The project aims at implementing a ternary search tree using Python.
@@ -137,6 +137,17 @@ In smaller datasets, **recursive trees** show relatively stable insertion times 
 Based on the result data generated in the HPC (available in the Output folder), we observed that B-trees consistently show the fastest insertion and searching times, making them the most efficient overall, while recursion-based TST struggles at larger sample sizes, even failing at 50M entries (recursion depth exceeded error). Iterative trees offer stable performance, maintaining reasonable insertion and search times without extreme jumps, whereas sparse trees show increasing complexity as sample sizes grow. Exact searching times remain low for smaller sample sizes but increase significantly for larger datasets. The presence of errors in recursion and some inconsistencies in sparse tree performance suggest scalability challenges, whereas B-trees remain consistently efficient even as data size grows. This analysis highlights the importance of selecting the right tree structure based on dataset size and operational requirements.
 
 ### Datasets .pkl files
+
+### Comparison of the trees with Different Datasets having ~2M words)
+Performance comparisons were made between around 2M words from the `frequency_words`, `wikipedia`'s unsorted dataset and a sorted list of Wikipedia words, specifically to analyze the impact of tree balance on execution times.
+Results from the output in the HPC folder were pooled and summary graphs were created and are available in the Output folder.
+As observed, pickle files generally show faster insertion and searching times compared to text files for datasets containing around 2 million words.
+Recursion B-trees consistently show the best performance, with the lowest insertion and searching times, except for wikipedia_sorted, where searching was not possible due to a recursion error. 
+Recursion-based TST trees perform poorly, especially with sorted datasets, as their searching times increase significantly and can even cause errors. 
+Iterative trees maintain stable performance with reasonable insertion and searching times, making them a balanced alternative. 
+Sparse trees exhibit growing complexity as dataset sizes increase, leading to higher insertion and searching times, making them less scalable. 
+The frequency_words dataset has a more limited word spread, resulting in lower searching times, while Wikipedia has a higher variety of words, leading to longer searching times. Wikipedia_sorted, being a sorted version of Wikipedia, has the highest searching times, showing that sorting negatively affects recursive structures. Overall, choosing the right tree structure depends on dataset size and spread, with B-trees being the most efficient except in highly sorted cases.
+
 
 ## Performance Testing : Comparison with B-Trees
 
