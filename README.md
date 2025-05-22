@@ -133,11 +133,17 @@ In smaller datasets, **recursive trees** show relatively stable insertion times 
 
 ## Performance Testing : Large Datasets using HPC infrastructure
 
+### Datasets as.txt files
+Based on the result data generated in the HPC (available in the Output folder), we observed that B-trees consistently show the fastest insertion and searching times, making them the most efficient overall, while recursion-based TST struggles at larger sample sizes, even failing at 50M entries (recursion depth exceeded error). Iterative trees offer stable performance, maintaining reasonable insertion and search times without extreme jumps, whereas sparse trees show increasing complexity as sample sizes grow. Exact searching times remain low for smaller sample sizes but increase significantly for larger datasets. The presence of errors in recursion and some inconsistencies in sparse tree performance suggest scalability challenges, whereas B-trees remain consistently efficient even as data size grows. This analysis highlights the importance of selecting the right tree structure based on dataset size and operational requirements.
+
+### Datasets .pkl files
+
 ## Performance Testing : Comparison with B-Trees
 
 ## Discussion : Time and Space Complexity
-When the input list is sorted or semi-sorted, a ternary search tree (TST) can become unbalanced, degrading its insertion time complexity from O(log n) to O(n), while its space complexity remains O(n). This happens because each character comparison may consistently follow only left or right branches, never balancing across all three, which causes the TST to behave like a linked list. \
-As a result, longer paths are created, and more edges must be traversed, leading to significantly higher insertion times. In recursive TST implementations, this imbalance is exacerbated by deep recursion, which can trigger a RecursionError, as seen in `ternary_tree.py` and `ternary_tree_recursive.py`. \
+When the input list is sorted or semi-sorted, a ternary search tree (TST) can become unbalanced, degrading its insertion time complexity from O(log n) to O(n), thus making it linear link of nodes, while its space complexity remains O(n). This happens because each character comparison may consistently follow only left or right branches, never balancing across all three, which causes the TST to behave like a linked list. \
+As a result, longer paths are created, and more edges must be traversed, leading to significantly higher insertion times. In recursive TST implementations, this imbalance is worsened by deep recursion, which can trigger a RecursionError, as seen in `ternary_tree.py` and `ternary_tree_recursive.py`. \
+Consequently, the shorter the path, the better the dependencies are captured. Additionally, to allow models to learn these long-term patterns, the historical input to the models should also be long and in that case a low time and space complexity becomes even more relevant. 
 Next, `ternary_tree_B.py` and `ternary_tree_minimalistic.py` exhibit excessive memory usage (up to ~10 GB) due to either added metadata or lack of object overhead prevention, leading to large numbers of unshared nodes and deeper nesting. 
 Moreover, `ternary_tree_minimalistic.py` includes no optimization properties resulting in every insert spawning new nodes. \
 In contrast, `btree.py` remains efficient (~5.3 GB) due to its compact structure, shallow depth, iterative insertion, and storage of multiple keys per node, which significantly reduces the number of node allocations. In a TST, n refers to the number of strings, with each insert potentially creating one node per character, while in a BST, n typically represents full words. \
@@ -152,3 +158,4 @@ The sparse structure of unoptimized TSTs means more pointers and strings are sto
 [^2]: [Hugging Face Wikipedia Words](https://huggingface.co/datasets/kossnocorp/wikipedia-words-en-low) – A dataset of English words extracted from Wikipedia for NLP tasks.  
 [^3]: [Frequency Words 2018](https://huggingface.co/datasets/StephanAkkerman/frequency-words-2018) – A dataset of frequently used English words based on 2018 language data.  
 [^4]: [KU Leuven HPC On-Demand](http://ondemand.hpc.kuleuven.be/) – A platform for accessing high-performance computing resources at KU Leuven.
+[^5]: Liu, S., Yu, H., Liao, C., Li, J., Lin, W., Liu, A. X., & Dustdar, S. (2022). Pyraformer: Low-Complexity Pyramidal Attention for Long-Range Time Series Modeling and Forecasting. In Proceedings of the Tenth International Conference on Learning Representations (ICLR 2022). https://doi.org/10.34726/2945
