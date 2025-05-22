@@ -129,12 +129,19 @@ For large dataset benchmarks, we used High Performance Computing (HPC) infrastru
 The output results and the scripts are available in the `HPC` folder.
 
 ## Performance Testing : Small Datasets
+In smaller datasets, **recursive trees** show relatively stable insertion times but with some fluctuations, indicating possible efficiency changes at different scales. That can be explained by the overhead of recursive function calls, becoming more noticeable depending on data distribution and tree depth. **Iterative trees** have inconsistent performance, with near-zero values at some sample sizes but increasing times at larger sizes. **Sparse trees** maintain generally lower and more predictable times, suggesting moderate efficiency in handling structured data. **B-trees** excel at small sample sizes, showing zero times for up to 1,000 entries, before gradually increasing at **10,000 and beyond**, reinforcing their ability to manage small-scale datasets efficiently. That reflects the B-trees strength of a balanced structure and node-level storage, which minimizes insertion operations for small datasets.  Overall, **B-trees are the best choice for small data**, while **iterative trees show unpredictability**, and **recursive and sparse trees demonstrate moderate but stable performance** based on the data provided. 
 
 ## Performance Testing : Large Datasets using HPC infrastructure
 
 ## Performance Testing : Comparison with B-Trees
 
 ## Discussion : Time and Space Complexity
+When the input list is sorted or semi-sorted, a ternary search tree (TST) can become unbalanced, degrading its insertion time complexity from O(log n) to O(n), while its space complexity remains O(n). This happens because each character comparison may consistently follow only left or right branches, never balancing across all three, which causes the TST to behave like a linked list. \
+As a result, longer paths are created, and more edges must be traversed, leading to significantly higher insertion times. In recursive TST implementations, this imbalance is exacerbated by deep recursion, which can trigger a RecursionError, as seen in `ternary_tree.py` and `ternary_tree_recursive.py`. \
+Next, `ternary_tree_B.py` and `ternary_tree_minimalistic.py` exhibit excessive memory usage (up to ~10 GB) due to either added metadata or lack of object overhead prevention, leading to large numbers of unshared nodes and deeper nesting. 
+Moreover, `ternary_tree_minimalistic.py` includes no optimization properties resulting in every insert spawning new nodes. \
+In contrast, `btree.py` remains efficient (~5.3 GB) due to its compact structure, shallow depth, iterative insertion, and storage of multiple keys per node, which significantly reduces the number of node allocations. In a TST, n refers to the number of strings, with each insert potentially creating one node per character, while in a BST, n typically represents full words. \
+The sparse structure of unoptimized TSTs means more pointers and strings are stored per word; therefore, it is more efficient to prefix or compress shared paths. If words are long and share prefixes, TSTs are more space-efficient. Ultimately, poor tree balance leads not only to degraded performance but also to increased memory consumption, especially when large and sorted datasets are involved.
 
 ## Conclusion
 
