@@ -5,34 +5,53 @@ The project aims at implementing a ternary search tree using Python.
 The goal is to explore different ternary search trees and explore their efficiencies in handling searches and insertions. The goal is also to test their performance with small and large dataset on an HPC infrastuctures. 
 The following flowchart illustrates our strategy.
 ```mermaid
-flowchart TD
-    Start-- Rafke/Sophie -->Create_TSTs
-    Create_TSTs--Rafke/Sophie -->Ternary_Tree_A
-    Create_TSTs--Sophie-->Ternary_Tree_B
-    Create_TSTs--Rafke-->Ternary_Tree_C
-    Create_TSTs--Rafke-->Ternary_Tree_D
-    Binary_Tree --> Unit_tests
-    Ternary_Tree_A --> Unit_tests
-    Ternary_Tree_B --> Unit_tests
-    Ternary_Tree_C --> Unit_tests
-    Ternary_Tree_D --> Unit_tests
-    Unit_tests --> Performance_tests_small
-    Performance_tests_small --> id5["Datasets sizes[10,100,1000,10000,500000,100000,300000]"]
-    id5 --> Performance_tests_big
-    Performance_tests_big --> id6["Datasets sizes[500000,1M,2M,5M,10M,20M,50M]"]
-    Start-- Rafke/Sophie -->Modify_Binary_Tree --> Binary_Tree
-    Start-- Rafke/Sophie -->Find_Datasets
-    Find_Datasets -- Rafke --> Big_Datasets
-    Find_Datasets -- Sophie --> Small_Datasets
-    Big_Datasets --> id1["wikipedia-words-en-low (2.6 M words)"]
-    Big_Datasets --> id2["frequency-words-2018 (50 M words)"]
-    Small_Datasets --> id3["(corncob_lowercase.txt (50k words))"]
-    Small_Datasets --> id4["(words_alpha.txt  (300k words))"]
-    Unit_tests --> Documentation
-    id5 --> Documentation
-    id6 --> Documentation
-    Documentation --> End
+flowchart LR
+    Start(["🔹 Start"])-- Rafke/Sophie -->Find_Datasets
+    Start(["🔹 Start"])-- Rafke/Sophie -->Create_TSTs
+    Start(["🔹 Start"])--Sophie-->Optimize_Binary_Tree
+
+    subgraph Dataset_Selection
+        Find_Datasets -- Rafke --> Big_Datasets
+        Find_Datasets -- Sophie --> Small_Datasets
+        Big_Datasets --> id1["Wikipedia Words (2.6M)"]
+        Big_Datasets --> id2["Frequency Words (50M)"]
+        Small_Datasets --> id3["Corncob Lowercase (50k)"]
+        Small_Datasets --> id4["Words Alpha (300k)"]
+    end
+    style Dataset_Selection fill:#FFDDC1,stroke:#FF5722
+
+    subgraph Tree_Construction
+        Create_TSTs--Rafke/Sophie -->Ternary_Tree
+        Create_TSTs--Sophie-->Ternary_Tree_Iterative
+        Create_TSTs--Rafke-->Ternary_Tree_Sparse
+        Create_TSTs--Rafke-->Ternary_Tree_HighlyRecursive
+        Optimize_Binary_Tree--Sophie-->Binary_Tree
+    end
+    style Tree_Construction fill:#C1E1FF,stroke:#2196F3
+
+    subgraph Performance_Testing
+        Binary_Tree --Rafke--> Unit_tests
+        Ternary_Tree --Rafke--> Unit_tests
+        Ternary_Tree_Iterative --Rafke--> Unit_tests
+        Ternary_Tree_Sparse --Rafke--> Unit_tests
+        Ternary_Tree_HighlyRecursive --Rafke--> Unit_tests
+        Unit_tests --> Performance_tests_small
+        Performance_tests_small --Sophie--> id5["Small Dataset Sizes [10,100,1000,10k,50k, 300k]"]
+        id5 --> Performance_tests_big
+        Performance_tests_big --Rafke--> id6["Big Dataset Sizes [500k,1M,2M,5M,10M,20M,50M]"]
+        Performance_tests_big --Sophie--> id6["Big Dataset Sizes [500k,1M,2M,5M,10M,20M,50M]"]
+    end
+    style Performance_Testing fill:#D1FFD1,stroke:#388E3C
+
+    subgraph Documentation_Feedback
+        Unit_tests --Rafke/Sophie --> Documentation
+        id5 --Rafke/Sophie --> Documentation
+        id6 --Rafke/Sophie --> Documentation
+    end
+    style Documentation_Feedback fill:#FFD1D1,stroke:#D32F2F
+    Documentation --> End(["🛑 End"])
 ```
+
 
 ## Repository structure 
 And below is a more comprised diagram, showing the working of the repository. 
@@ -139,14 +158,17 @@ Based on the result data generated in the HPC (available in the Output folder), 
 ### Datasets .pkl files
 
 ### Comparison of the trees with Different Datasets having ~2M words)
-Performance comparisons were made between around 2M words from the `frequency_words`, `wikipedia`'s unsorted dataset and a sorted list of Wikipedia words, specifically to analyze the impact of tree balance on execution times.
-Results from the output in the HPC folder were pooled and summary graphs were created and are available in the Output folder.
-As observed, pickle files generally show faster insertion and searching times compared to text files for datasets containing around 2 million words.
-Recursion B-trees consistently show the best performance, with the lowest insertion and searching times, except for wikipedia_sorted, where searching was not possible due to a recursion error. 
-Recursion-based TST trees perform poorly, especially with sorted datasets, as their searching times increase significantly and can even cause errors. 
+Performance comparisons were made between around 2M words from the `frequency_words`, `wikipedia`'s unsorted dataset and a sorted list of Wikipedia words (`wikipedia_sorted`) specifically to analyze the impact of tree balance on execution times. 
+Results from the output in the HPC folder were pooled and summary graphs were created and are available in the [Outputs](https://github.com/r-niemans/CDS_ternarysearchtree/tree/main/HPC/Outputs) folder. 
+
+As observed, pickle files generally show faster insertion and searching times compared to text files for datasets containing around 2 million words. 
+* Recursion B-trees consistently show the best performance, with the lowest insertion and searching times, except for `wikipedia_sorted`, where searching was not possible due to a recursion error. 
+* Recursion-based TST trees perform poorly, especially with sorted datasets, as their searching times increase significantly and can even cause errors. 
 Iterative trees maintain stable performance with reasonable insertion and searching times, making them a balanced alternative. 
-Sparse trees exhibit growing complexity as dataset sizes increase, leading to higher insertion and searching times, making them less scalable. 
-The frequency_words dataset has a more limited word spread, resulting in lower searching times, while Wikipedia has a higher variety of words, leading to longer searching times. Wikipedia_sorted, being a sorted version of Wikipedia, has the highest searching times, showing that sorting negatively affects recursive structures. Overall, choosing the right tree structure depends on dataset size and spread, with B-trees being the most efficient except in highly sorted cases.
+* Sparse trees show growing complexity as dataset sizes increase, leading to higher insertion and searching times, making them less scalable. 
+* The `frequency_words` dataset has a more limited word spread, resulting in lower searching times, while Wikipedia has a higher variety of words, leading to longer searching times. On the contrary, `wikipedia_sorted`, being a sorted version of Wikipedia, has the highest searching times, showing that sorting negatively affects recursive structures. 
+
+Overall, choosing the right tree structure depends on dataset size, type and spread, with B-trees being the most efficient except in highly sorted cases.
 
 
 ## Performance Testing : Comparison with B-Trees
