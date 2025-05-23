@@ -6,6 +6,7 @@ but making a function call heavier."""
 
 class TSTNode:
     """This object is a node in a ternary search tree (TST)."""
+
     def __init__(self, char):
         """Initialisation of the node"""
         self.char = char
@@ -35,6 +36,8 @@ class TSTNode:
 
     def _search(self, string):
         """Search for words"""
+        if not string:
+            return False
         char = string[0]
 
         if char < self.char:
@@ -72,7 +75,8 @@ class TSTNode:
 
     def _to_string(self, indent=''):
         """String representation of the node"""
-        repr_str = indent + repr(self.char) + ("*" if self.last_char_in_string else "")
+        repr_str = indent + repr(self.char) + \
+            ("*" if self.last_char_in_string else "")
         if self.equals:
             repr_str += '\n' + self.equals._to_string(indent + '  ')
         if self.less_than:
@@ -84,6 +88,7 @@ class TSTNode:
 
 class TernarySearchTreeRecursive:
     """Ternary Search tree search for storing words"""
+
     def __init__(self):
         self.root = None
 
@@ -93,9 +98,11 @@ class TernarySearchTreeRecursive:
             self.root = TSTNode(string[0])
         self.root._insert(string)
 
-    def search(self, string):
+    def search(self, string, exact=False):
         """Search for a word in the tree"""
-        return self.root._search(string) if self.root else False
+        if exact:
+            return self.root._search(string) if self.root else False
+        return self.prefix_search(string) if self.root else []
 
     def prefix_search(self, prefix):
         """Search for a prefix in the tree"""

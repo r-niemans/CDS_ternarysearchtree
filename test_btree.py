@@ -3,6 +3,12 @@ import unittest
 from trees.btree import BtreeNode
 
 
+def load_not_insert_words():
+    """Load words from 'data/not_insert_words.txt'."""
+    with open("data/not_insert_words.txt", "r", encoding="utf-8") as file:
+        return [line.strip() for line in file if line.strip()]
+
+
 class TestBtree(unittest.TestCase):
 
     def setUp(self):
@@ -41,6 +47,12 @@ class TestBtree(unittest.TestCase):
         for word in words:
             self.root._insert(word)
         self.assertEqual(len(self.root), 4)
+
+    def test_words_not_inserted(self):
+        """Ensure words from 'not_insert_words.txt' are not found."""
+        not_insert_words = load_not_insert_words()
+        for word in not_insert_words:
+            self.assertFalse(self.root._search(word), f"{word} should not be found")
 
 
 if __name__ == '__main__':
