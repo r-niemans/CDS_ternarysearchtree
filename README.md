@@ -1,4 +1,4 @@
-# Concepts of Data Science 2024-2025 - Implementation of a Tenary Search Tree
+# Concepts of Data Science 2024-2025 - Implementation of a Ternary Search Tree
 
 ## Project Description :
 The project aims at implementing a ternary search tree using Python.
@@ -186,7 +186,11 @@ In contrast, `btree.py` remains efficient (~5.3 GB) due to its compact structu
 The sparse structure of unoptimized TSTs means more pointers and strings are stored per word; therefore, it is more efficient to prefix or compress shared paths. If words are long and share prefixes, TSTs are more space-efficient. Ultimately, poor tree balance leads not only to degraded performance but also to increased memory consumption, especially when large and sorted datasets are involved.
 
 ## Conclusion
-
+We tested different tree structures to understand their performance in various situations. Using **unit tests and HPC benchmarks**, we analyzed how trees handle insertion and searching for small and large datasets. \
+We attempted to classify our trees in a quadrant chart based on speed and scale.
+We conclude that **binary trees** work best overall, with fast insertion and search times. **Recursive trees** struggle as datasets grow, especially with sorted data, where they become inefficient or even fail. **Iterative trees** perform steadily but show unpredictable behavior in small datasets. **Sparse trees** maintain reasonable efficiency at small scales but become slower as dataset sizes increase. 
+Our results highlight how **dataset size and structure**, and **the types of the tree** affect tree performance, showing the importance of choosing the right tree based on efficiency and scalability.
+When looking at documentation we could further study by looking at Tries which seem to be more interesting for prefix searches, or self-balancing binary search trees such as the AVL (Adelson-Velsky and Landis) trees or red-black trees to tackle the issue of unbalanced trees [^6]. Moreover, B+ trees could be another alternative to look at, especially when working with range queries. They store data pointers at the leaf nodes of the tree and not at internal nodes, like the regular B-tree. We were also thinking about ameliorating our benchmarking processes by putting our trees in pickle files.
 
 ## References:
 
@@ -195,3 +199,4 @@ The sparse structure of unoptimized TSTs means more pointers and strings are sto
 [^3]: [Frequency Words 2018](https://huggingface.co/datasets/StephanAkkerman/frequency-words-2018) – A dataset of frequently used English words based on 2018 language data.  
 [^4]: [KU Leuven HPC On-Demand](http://ondemand.hpc.kuleuven.be/) – A platform for accessing high-performance computing resources at KU Leuven.
 [^5]: Liu, S., Yu, H., Liao, C., Li, J., Lin, W., Liu, A. X., & Dustdar, S. (2022). Pyraformer: Low-Complexity Pyramidal Attention for Long-Range Time Series Modeling and Forecasting. In Proceedings of the Tenth International Conference on Learning Representations (ICLR 2022). https://doi.org/10.34726/2945
+[^6]: Schwarz, K. (2015). Lecture 15: Tries and Suffix Trees. CS166: Advanced Data Structures. Stanford University. Retrieved from https://web.stanford.edu/class/archive/cs/cs166/cs166.1256/lectures/15/Lecture%20Slides.pdf
