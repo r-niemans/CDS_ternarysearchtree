@@ -1,0 +1,12 @@
+<changelist name="Uncommitted_changes_before_Update_at_26_05_2025,_13_54_[Changes]" date="1748260465457" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_05_2025,_13_54_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 26/05/2025, 13:54 [Changes]" />
+  <binary>
+    <option name="AFTER_PATH" value="HPC/frequency_words.pkl" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_05_2025,_13_54_[Changes]/frequency_words.pkl" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="HPC/wikipedia.pkl" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_26_05_2025,_13_54_[Changes]/wikipedia.pkl" />
+  </binary>
+</changelist>

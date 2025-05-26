@@ -1,0 +1,70 @@
+Index: test_btree.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import unittest\n\nfrom trees.btree import BtreeNode\n\n\nclass TestBtree(unittest.TestCase):\n\n    def setUp(self):\n        self.root = BtreeNode(\"x\")\n\n    def test_insert_and_search(self):\n        words = [\"papaya\", \"mandarin\", \"lemon\", \"apple\", \"banana\", \"orange\", \"watermelon\",\n                 \"pineapple\", \"grape\", \"melon\", \"mango\", \"strawberry\", \"raspberry\",\"peach\"]\n\n        for word in words:\n            self.root._insert(word)\n\n        for word in words:\n            self.assertTrue(self.root._search(word), f\"Search failed due to: {word}\")\n\n        self.assertFalse(self.root._search(\"not_in_tree\"))\n\n    def test_in_order_traversal(self):\n        words = [\"tennis\", \"basketball\", \"badminton\", \"soccer\", \"cricket\", \"lacrosse\",\n                 \"rugby\", \"golf\", \"hockey\", \"baseball\", \"volleyball\", \"boxing\", \"table tennis\"]\n        for word in words:\n            self.root._insert(word)\n\n        all_words = self.root._all_strings()\n        expected_sorted = sorted(set(words + [\"x\"]))\n        self.assertEqual(all_words, expected_sorted)\n\n    def test_duplicates_not_inserted(self):\n        self.root._insert(\"x\")  # Duplicate of root\n        self.root._insert(\"x\")  # Again\n        result = self.root._all_strings()\n        self.assertEqual(result.count(\"x\"), 1)\n\n    def test_len_function(self):\n        words = [\"haircut\", \"make-up\", \"cardiology\"]\n        for word in words:\n            self.root._insert(word)\n        self.assertEqual(len(self.root), 4)\n\n\nif __name__ == '__main__':\n    unittest.main()\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/test_btree.py b/test_btree.py
+--- a/test_btree.py	(revision 30c2bdff65e7666bbee23ede07da20d0cb51d2e7)
++++ b/test_btree.py	(date 1748259840403)
+@@ -1,11 +1,11 @@
+ import unittest
+ 
+-from trees.btree import BtreeNode
+-
++from trees.btree import BtreeNode, Btree
+ 
+ class TestBtree(unittest.TestCase):
+ 
+     def setUp(self):
++        self.tree = Btree()
+         self.root = BtreeNode("x")
+ 
+     def test_insert_and_search(self):
+@@ -20,7 +20,7 @@
+ 
+         self.assertFalse(self.root._search("not_in_tree"))
+ 
+-    def test_in_order_traversal(self):
++    def test_in_order(self):
+         words = ["tennis", "basketball", "badminton", "soccer", "cricket", "lacrosse",
+                  "rugby", "golf", "hockey", "baseball", "volleyball", "boxing", "table tennis"]
+         for word in words:
+@@ -31,16 +31,29 @@
+         self.assertEqual(all_words, expected_sorted)
+ 
+     def test_duplicates_not_inserted(self):
+-        self.root._insert("x")  # Duplicate of root
+-        self.root._insert("x")  # Again
++        self.root._insert("x")
++        self.root._insert("x")
+         result = self.root._all_strings()
+         self.assertEqual(result.count("x"), 1)
+ 
+-    def test_len_function(self):
+-        words = ["haircut", "make-up", "cardiology"]
+-        for word in words:
+-            self.root._insert(word)
+-        self.assertEqual(len(self.root), 4)
++    def test_len(self):
++        fruits = ["apple", "banana", "cherry", "date", "fig", "grape", "kiwi",
++                  "lemon", "mango", "nectarine", "orange", "papaya", "quince",
++                  "raspberry", "strawberry", "tangerine", "ugli", "watermelon"]
++
++        veggies = ["asparagus", "broccoli", "carrot", "daikon", "eggplant",
++                      "fennel", "garlic", "horseradish", "kale", "leek", "mushroom",
++                      "onion", "parsnip", "radish", "spinach", "turnip", "zucchini"]
++
++        check_duplicates = ["apple", "banana", "carrot", "zucchini", "kiwi", "kiwi"]
++
++        all_words = fruits + veggies + check_duplicates
++
++        for item in all_words:
++            self.tree.insert(item)
++
++        expected_unique = set(all_words + ["x"])
++        self.assertEqual(len(self.tree), len(expected_unique))
+ 
+ 
+ if __name__ == '__main__':
