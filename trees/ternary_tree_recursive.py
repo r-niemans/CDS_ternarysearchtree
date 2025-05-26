@@ -1,9 +1,14 @@
-""""This is a reviewed version of a previously designed ternary search tree implemented and differs in
-sense that it does not contain empty nodes and slices strings recursively, therefore being more memory efficient
+""""This is a reviewed version of a previously designed ternary search tree
+implemented and differs in sense that it does not contain empty nodes and
+slices strings recursively, therefore being more memory efficient
 but making a function call heavier."""
 
+
 class TSTNode:
+    """This object is a node in a ternary search tree (TST)."""
+
     def __init__(self, char):
+        """Initialisation of the node"""
         self.char = char
         self.last_char_in_string = False
         self.less_than = None
@@ -11,6 +16,7 @@ class TSTNode:
         self.larger_than = None
 
     def _insert(self, string):
+        """Insertion of words via their characters in the TST."""
         char = string[0]
 
         if char < self.char:
@@ -29,6 +35,9 @@ class TSTNode:
             self.last_char_in_string = True
 
     def _search(self, string):
+        """Search for words"""
+        if not string:
+            return False
         char = string[0]
 
         if char < self.char:
@@ -41,6 +50,7 @@ class TSTNode:
             return self.last_char_in_string
 
     def _all_strings(self, prefix=""):
+        """Retrieve all strings stored in the node."""
         strings = []
         if self.last_char_in_string:
             strings.append(prefix + self.char)
@@ -53,6 +63,7 @@ class TSTNode:
         return strings
 
     def __len__(self):
+        """Calculate the number of nodes in the tree"""
         length = 1 if self.last_char_in_string else 0
         if self.less_than:
             length += len(self.less_than)
@@ -63,7 +74,9 @@ class TSTNode:
         return length
 
     def _to_string(self, indent=''):
-        repr_str = indent + repr(self.char) + ("*" if self.last_char_in_string else "")
+        """String representation of the node"""
+        repr_str = indent + repr(self.char) + \
+            ("*" if self.last_char_in_string else "")
         if self.equals:
             repr_str += '\n' + self.equals._to_string(indent + '  ')
         if self.less_than:
@@ -73,19 +86,26 @@ class TSTNode:
         return repr_str
 
 
-class TernarySearchTree_Recursive:
+class TernarySearchTreeRecursive:
+    """Ternary Search tree search for storing words"""
+
     def __init__(self):
         self.root = None
 
     def insert(self, string):
+        """Initialisation of an empty ternary search tree"""
         if not self.root:
             self.root = TSTNode(string[0])
         self.root._insert(string)
 
-    def search(self, string):
-        return self.root._search(string) if self.root else False
+    def search(self, string, exact=False):
+        """Search for a word in the tree"""
+        if exact:
+            return self.root._search(string) if self.root else False
+        return self.prefix_search(string) if self.root else []
 
     def prefix_search(self, prefix):
+        """Search for a prefix in the tree"""
         results = []
         if not prefix:  # Check if prefix is empty
             node = self.root
@@ -96,6 +116,7 @@ class TernarySearchTree_Recursive:
         return results
 
     def _search_prefix_node(self, node, prefix, index):
+        """Search for a prefix in the node"""
         if not node:
             return None
 
@@ -110,6 +131,7 @@ class TernarySearchTree_Recursive:
             return node
 
     def _collect_strings(self, node, prefix, results):
+        """Collect all words stored in the ternary search tree."""
         if node.last_char_in_string:
             results.append(prefix + node.char)
 
@@ -121,13 +143,17 @@ class TernarySearchTree_Recursive:
             self._collect_strings(node.larger_than, prefix, results)
 
     def count_strings(self):
+        """Count the strings in the ternary search tree."""
         return len(self)
 
     def all_strings(self):
+        """Retrieve all words stored in the tree."""
         return self.prefix_search("")
 
     def __len__(self):
+        """Return the number of unique words in the tree."""
         return len(self.root) if self.root else 0
 
     def __repr__(self):
+        """String representation of the tree"""
         return self.root._to_string() if self.root else 'empty'

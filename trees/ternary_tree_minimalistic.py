@@ -2,7 +2,10 @@
 Sparse tree since you create nodes as you build the tree essentially only building what you need.
 Higher in terms of saving memory but more costly time-wise due to the dict look-ups
 """
+
+
 class TSTNode:
+    """This object is a node in a ternary search tree (TST)."""
     def __init__(self, character=None):
         self.character = character
         self.children = {}  # this contains the nodes so {'lt': node, 'eq': node, 'gt': node}
@@ -10,6 +13,7 @@ class TSTNode:
 
 
 class TernarySearchTreeSparse:
+    """Ternary Search tree for storing words"""
     def __init__(self):
         self.root = None
         self.size = 0
@@ -49,6 +53,7 @@ class TernarySearchTreeSparse:
             self.size += 1
 
     def search(self, word, exact=False):
+        """Ternary Search tree search for storing words"""
         if not self.root or not word:
             return False
 
@@ -78,6 +83,7 @@ class TernarySearchTreeSparse:
         return current.is_end if exact else True
 
     def all_strings(self):
+        """Retrieve all words stored in the tree."""
         if not self.root:
             return []
 
