@@ -187,10 +187,29 @@ The sparse structure of unoptimized TSTs means more pointers and strings are sto
 
 ## Conclusion
 We tested different tree structures to understand their performance in various situations. Using **unit tests and HPC benchmarks**, we analyzed how trees handle insertion and searching for small and large datasets. \
-We attempted to classify our trees in a quadrant chart based on speed and scale.
+We attempted to classify our trees in a quadrant chart based on speed and scale, which can be seen below.
 We conclude that **binary trees** work best overall, with fast insertion and search times. **Recursive trees** struggle as datasets grow, especially with sorted data, where they become inefficient or even fail. **Iterative trees** perform steadily but show unpredictable behavior in small datasets. **Sparse trees** maintain reasonable efficiency at small scales but become slower as dataset sizes increase. 
 Our results highlight how **dataset size and structure**, and **the types of the tree** affect tree performance, showing the importance of choosing the right tree based on efficiency and scalability.
 When looking at documentation we could further study by looking at Tries which seem to be more interesting for prefix searches, or self-balancing binary search trees such as the AVL (Adelson-Velsky and Landis) trees or red-black trees to tackle the issue of unbalanced trees [^6]. Moreover, B+ trees could be another alternative to look at, especially when working with range queries. They store data pointers at the leaf nodes of the tree and not at internal nodes, like the regular B-tree. We were also thinking about ameliorating our benchmarking processes by putting our trees in pickle files.
+
+```mermaid
+quadrantChart
+    title Comparative Performance Analysis of trees
+    x-axis Small Sample Size --> Large Sample Size
+    y-axis Slow Time --> Fast Time
+    quadrant-1 Efficient for both
+    quadrant-2 Strong Small Data
+    quadrant-3 Inefficient Small Scale
+    quadrant-4 Struggles Large Scale
+    BTree_Small: [0.2, 0.8]
+    BTree_Large: [0.5, 0.6]
+    Sparse_Small: [0.4, 0.7]
+    Sparse_Large: [0.55, 0.4]
+    Iterative_Small: [0.6, 0.3]
+    Iterative_Large: [0.7, 0.4]
+    Recursive_Small: [0.4, 0.5]
+    Recursive_Large: [0.8, 0.2]
+```
 
 ## References:
 
