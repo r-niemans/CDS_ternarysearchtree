@@ -54,10 +54,10 @@ flowchart LR
 We started by developing our first ternary search tree (TST) `ternary_tree.py` using an object-oriented approach in Python, based on the binary tree from the course materials. To meet the requirements for prefix searches and exact searches, we made slight modifications to the binary tree structure in  `btree.py`. \
 After that, we divided our work into creating three or more different TSTs, each with unique performance characteristics: an iterative version `ternary_tree_B.py`, a sparse version `ternary_tree_minimalistic.py`, and a highly recursive version `ternary_tree_recursive.py`. \
 Alongside the implementation, we searched for various datasets—including small samples like the `corncob_lowercase.txt` dataset from the course, the `words_alpha.txt` [^1] dataset, as well as larger datasets exceeding one million words. We took two large datasets (one from `wikipedia` words [^2], and the other from `frequency_words` in 2018[^3]). It was assumed that the variety and complexity of words in the wikipedia dataset is larger than the frequency words where this is more a quantitative dataset that could lead to some differences in the inserting and searching times. \
-To ensure correctness, we performed unit tests for our different trees, making sure they passed a set of edge cases we designed in the `test_tst.py`. Once all trees were properly refactored and functional, we conducted performance tests using datasets of various sizes. These tests measured the insert and search speed of each TST under different conditions. The binary tree was also evaluated together with those TST.
+To ensure correctness, we performed unit tests for our different trees, making sure they passed a set of edge cases we designed in the `test_tst.py`. Once all trees were properly refactored and functional, we conducted performance tests using datasets of various sizes. These tests measured the insert and search speed of each TST under different conditions. The binary tree was also evaluated together with those TST, but for this tree we used different test cases, that can be found in `test_btree.py`.
 For smaller dataset benchmarks, we performed the test locally, where the results are available in the Jupyter Notebook in `tst_implementations.ipynb`. We used the `corncob_lowercase` and `words` dataset. \
-For large dataset benchmarks, we used HPC infrastructure with Vlaamse Supercomputing Centrum [^4]. \
-The output results and the scripts are available in the `HPC` folder and Discussion and conclusion on our results are available in the following sections.
+For large dataset benchmarks, we used HPC infrastructure from Vlaams Supercomputing Centrum [^4]. \
+The output results and the scripts are available in the `HPC` folder. The discussion and conclusion based on these results can be consulted in the following sections.
 
 ## Contents
 ### Repository structure 
@@ -135,7 +135,7 @@ flowchart TD
     click HC "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/vsc_py_file.py"
     click SL "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/jobscript.slurm"
     click SL "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/jobscript2.slurm"
-    click OS "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/Outputs/slurm-out.zip"
+    click OS "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/Outputs"
 
     %% Styles
     classDef core fill:#D6EAF8,stroke:#1B4F72,color:#1B2631;
@@ -187,10 +187,29 @@ The sparse structure of unoptimized TSTs means more pointers and strings are sto
 
 ## Conclusion
 We tested different tree structures to understand their performance in various situations. Using **unit tests and HPC benchmarks**, we analyzed how trees handle insertion and searching for small and large datasets. \
-We attempted to classify our trees in a quadrant chart based on speed and scale.
+We attempted to classify our trees in a quadrant chart based on speed and scale, which can be seen below.
 We conclude that **binary trees** work best overall, with fast insertion and search times. **Recursive trees** struggle as datasets grow, especially with sorted data, where they become inefficient or even fail. **Iterative trees** perform steadily but show unpredictable behavior in small datasets. **Sparse trees** maintain reasonable efficiency at small scales but become slower as dataset sizes increase. 
 Our results highlight how **dataset size and structure**, and **the types of the tree** affect tree performance, showing the importance of choosing the right tree based on efficiency and scalability.
 When looking at documentation we could further study by looking at Tries which seem to be more interesting for prefix searches, or self-balancing binary search trees such as the AVL (Adelson-Velsky and Landis) trees or red-black trees to tackle the issue of unbalanced trees [^6]. Moreover, B+ trees could be another alternative to look at, especially when working with range queries. They store data pointers at the leaf nodes of the tree and not at internal nodes, like the regular B-tree. We were also thinking about ameliorating our benchmarking processes by putting our trees in pickle files.
+
+```mermaid
+quadrantChart
+    title Comparative Performance Analysis of trees
+    x-axis Small Sample Size --> Large Sample Size
+    y-axis Slow Time --> Fast Time
+    quadrant-1 Efficient for both
+    quadrant-2 Strong Small Data
+    quadrant-3 Inefficient Small Scale
+    quadrant-4 Struggles Large Scale
+    BTree_Small: [0.2, 0.8]
+    BTree_Large: [0.5, 0.6]
+    Sparse_Small: [0.4, 0.7]
+    Sparse_Large: [0.55, 0.4]
+    Iterative_Small: [0.6, 0.3]
+    Iterative_Large: [0.7, 0.4]
+    Recursive_Small: [0.4, 0.5]
+    Recursive_Large: [0.8, 0.2]
+```
 
 ## References:
 
