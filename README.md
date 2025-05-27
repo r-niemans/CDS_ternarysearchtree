@@ -135,7 +135,7 @@ flowchart TD
     click HC "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/vsc_py_file.py"
     click SL "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/jobscript.slurm"
     click SL "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/jobscript2.slurm"
-    click OS "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/Outputs/slurm-out.zip"
+    click OS "https://github.com/r-niemans/cds_ternarysearchtree/blob/main/HPC/Outputs"
 
     %% Styles
     classDef core fill:#D6EAF8,stroke:#1B4F72,color:#1B2631;
