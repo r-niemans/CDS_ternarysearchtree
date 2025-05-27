@@ -20,7 +20,7 @@ class TernarySearchTreeSparse:
 
     def insert(self, word):
         if not word:
-            return
+            return False
         if not self.root:
             self.root = TSTNode()
 
@@ -54,9 +54,10 @@ class TernarySearchTreeSparse:
 
     def search(self, word, exact=False):
         """Ternary Search tree search for storing words"""
-        if not self.root or not word:
+        if not self.root :
             return False
-
+        if not word:
+            return False
         current = self.root
         index = 0
 

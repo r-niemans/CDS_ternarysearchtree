@@ -34,7 +34,7 @@ def load_not_insert_words():
 Btree
 ])
 @pytest.mark.parametrize("word_list", [
-    (["pizza", "cars", "can", '', "doll", "dormroom"]),
+    (["pizza", "cars", "can", "doll", "dormroom"]),
     (["avocado", "arsenal", "apextwin"]),
 ])
 def test_btree_insert_and_search(btree, word_list):
@@ -43,7 +43,7 @@ def test_btree_insert_and_search(btree, word_list):
         bst.insert(word)
     for word in word_list:
         assert bst.search(word, exact=True), f"{word} not found"
-    assert bst.search('', exact=True), 'Empty string should not be found'
+    assert not bst.search('', exact=True), 'Empty string should not be found'
 
 @pytest.mark.parametrize("word_list", [
     ([
